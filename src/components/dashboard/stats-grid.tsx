@@ -8,7 +8,7 @@ export function StatsGrid({ stats }: { stats: DashboardStats }) {
     ["Reste", `${stats.remainingPercent}%`],
     ["Sourates mémorisées", String(stats.memorizedSurahs)],
     ["Sourates en cours", String(stats.inProgressSurahs)],
-    ["Non commencées", String(stats.notStartedSurahs)],
+    ["À démarrer", String(stats.notStartedSurahs)],
     ["Révision semaine", `${stats.revisionWeeklyPercent}%`]
   ];
 
@@ -21,7 +21,7 @@ export function StatsGrid({ stats }: { stats: DashboardStats }) {
         </div>
         <Progress value={stats.memorizedPercent} />
       </Card>
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-3">
         {items.map(([label, value]) => (
           <Card key={label}>
             <p className="text-sm text-zinc-400">{label}</p>

@@ -84,9 +84,3 @@ export type SurahWithProgress = Surah & {
   percent: number;
   remainingAyahs: number;
 };
-
-export type AppState = {
-  progress: UserSurahProgress[];
-  study: StudyEntry[];
-  notes: Note[];
-};

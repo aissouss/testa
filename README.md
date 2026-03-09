@@ -1,29 +1,20 @@
-# Quran Journal (V1 terminée)
+# Quran Journal (V1)
 
-Application web complète de suivi de mémorisation du Coran (dashboard, surahs, révision, juz/hizb, étude, notes) avec persistance locale + Supabase optionnel.
-
-## Fonctionnalités livrées
-- Surah Tracker complet (114 sourates, édition statut/ayah, calcul auto progression + restant, recherche, filtres, tri, vue tableau + cartes).
-- Dashboard fiable (catégories exclusives, % mémorisé basé sur **6236 ayahs**, % restant, révision hebdomadaire).
-- Révision opérationnelle (date dernière révision, marquage rapide, à réviser auto, % hebdo auto).
-- Juz/Hizb avec progression calculée selon ayahs mémorisés des sourates associées.
-- Étude & Notes éditables et attachées à une sourate.
-- Persistance locale immédiate (localStorage) et lecture/écriture Supabase si configuré + user authentifié.
+Application Next.js 14 + TypeScript pour suivre la mémorisation, la révision et l'étude du Coran.
 
 ## Stack
-- Next.js 14 (App Router)
+- Next.js App Router
 - TypeScript
 - Tailwind CSS
-- UI primitives style shadcn/ui
-- Supabase JS
+- composants style shadcn/ui (local)
+- Supabase (auth + persistance)
 
-## Installation
+## Setup
 ```bash
 npm install
 cp .env.example .env.local
 npm run dev
 ```
-Puis ouvrir: `http://localhost:3000/dashboard`
 
 ## Variables d'environnement
 ```env
@@ -32,18 +23,23 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
 ```
 
-## Supabase (optionnel mais recommandé)
+## Base de données
 1. Exécuter `supabase/schema.sql` dans SQL Editor.
 2. Seed des 114 sourates:
 ```bash
 npx tsx supabase/seed.ts
 ```
-3. Activer Auth Email OTP côté Supabase pour la persistance par utilisateur.
 
-## Commandes utiles
-```bash
-npm run dev
-npm run lint
-npm run typecheck
-npm run build
-```
+## Pages
+- `/dashboard`
+- `/surahs`
+- `/juz`
+- `/hizb`
+- `/revision`
+- `/study`
+- `/notes`
+- `/settings`
+
+## Notes
+- Si Supabase n'est pas configuré, l'app utilise des données d'exemple locales pour une UX immédiate.
+- Les calculs centraux sont dans `src/lib/utils.ts`.

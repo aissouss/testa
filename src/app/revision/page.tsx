@@ -1,48 +1,19 @@
-"use client";
-
-import { useMemo, useState } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { useQuran } from "@/components/shared/quran-provider";
+import { getSurahs, getUserProgress } from "@/lib/supabase/queries";
+import { toSurahWithProgress } from "@/lib/utils";
 
-export default function RevisionPage() {
-  const { rows, markRevised } = useQuran();
-  const [filter, setFilter] = useState("due");
-
-  const known = rows.filter((r) => r.progress.status !== "TO_MEMORIZE" && r.percent > 0);
-  const due = known.filter((r) => r.progress.needsRevisionThisWeek);
-  const done = due.filter((r) => r.progress.revisedThisWeek);
-  const weeklyPercent = due.length ? Math.round((done.length / due.length) * 100) : 0;
-
-  const list = useMemo(() => {
-    if (filter === "done") return known.filter((r) => r.progress.revisedThisWeek);
-    if (filter === "all") return known;
-    return due;
-  }, [known, due, filter]);
-
+export default async function RevisionPage() {
+  const rows = toSurahWithProgress(await getSurahs(), await getUserProgress()).filter((r) => r.percent > 0);
   return (
     <AppShell>
-      <Card className="mb-4">
-        <h3 className="font-semibold">Suivi hebdomadaire</h3>
-        <p className="text-sm text-zinc-400">Connues: {known.length} · À réviser: {due.length} · Révisées: {done.length} · {weeklyPercent}%</p>
-      </Card>
-      <div className="mb-3">
-        <select className="rounded border bg-card px-3 py-2" value={filter} onChange={(e) => setFilter(e.target.value)}>
-          <option value="due">À réviser</option>
-          <option value="done">Révisées cette semaine</option>
-          <option value="all">Toutes connues</option>
-        </select>
-      </div>
       <Card>
+        <h3 className="mb-4 text-lg font-semibold">Révision hebdomadaire</h3>
         <div className="space-y-2 text-sm">
-          {list.map((r) => (
+          {rows.map((r) => (
             <div key={r.number} className="flex items-center justify-between border-b py-2">
-              <div>
-                <p>{r.number}. {r.transliteration}</p>
-                <p className="text-xs text-zinc-400">Dernière révision: {r.progress.lastRevisionAt ? new Date(r.progress.lastRevisionAt).toLocaleDateString() : "jamais"}</p>
-              </div>
-              <Button size="sm" variant="outline" onClick={() => markRevised(r.number)}>Marquer révisée</Button>
+              <span>{r.transliteration}</span>
+              <span>{r.progress.revisedThisWeek ? "Révisée ✅" : r.progress.needsRevisionThisWeek ? "À réviser" : "Planifiée"}</span>
             </div>
           ))}
         </div>
