@@ -102,7 +102,7 @@ supabase/
 
 ## 🧑‍💻 Author
 
-**Aissous** — L3 Software Engineering Student  
+**Aissouss** — L3 Software Engineering Student  
 [GitHub](https://github.com/aissouss)
 
 ---
